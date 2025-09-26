@@ -13,8 +13,6 @@ COPY . .
 # Build Next.js app
 RUN npm run build
 
----
-
 # Stage 2: Run the app
 FROM node:18-alpine AS runner
 WORKDIR /app
