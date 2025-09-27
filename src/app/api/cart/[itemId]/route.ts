@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import axios from "axios";
 
-// DELETE Handler
+// ✅ Correct handler signature for dynamic routes in Next.js 15
 export async function DELETE(
-  request: Request,
-  context: { params: Record<string, string> }
+  request: NextRequest,
+  context: { params: { itemId: string } }
 ) {
   const { itemId } = context.params;
 
@@ -37,10 +37,9 @@ export async function DELETE(
   }
 }
 
-// PATCH Handler
 export async function PATCH(
-  request: Request,
-  context: { params: Record<string, string> }
+  request: NextRequest,
+  context: { params: { itemId: string } }
 ) {
   const { itemId } = context.params;
 
