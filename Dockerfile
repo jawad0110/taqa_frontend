@@ -7,10 +7,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
-# Copy project files
+# Copy all source code
 COPY . .
 
-# Build the app but ignore TypeScript errors
+# Build Next.js app (ignore TS errors)
 RUN npm run build || echo "⚠️ Build completed with type errors — ignoring for deployment"
 
 # Stage 2: Run the app
@@ -19,24 +19,27 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Copy main artifacts
+# Copy main app files
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 
-# Copy config files *only if they exist*
-# These won't break if missing
-COPY --from=builder /app/next.config.js ./next.config.js
-COPY --from=builder /app/tailwind.config.js ./tailwind.config.js
-COPY --from=builder /app/postcss.config.js ./postcss.config.js
-COPY --from=builder /app/tsconfig.json ./tsconfig.json
+# Copy config files only if they exist
+RUN if [ -f /app/next.config.js ]; then echo "✅ Copy next.config.js"; fi
+COPY --from=builder /app/next.config.js ./ 2>/dev/null || true
 
-# Ignore missing config files at runtime (optional safeguard)
-RUN true
+RUN if [ -f /app/tailwind.config.js ]; then echo "✅ Copy tailwind.config.js"; fi
+COPY --from=builder /app/tailwind.config.js ./ 2>/dev/null || true
 
-# Expose Sevalla's injected port
+RUN if [ -f /app/postcss.config.js ]; then echo "✅ Copy postcss.config.js"; fi
+COPY --from=builder /app/postcss.config.js ./ 2>/dev/null || true
+
+RUN if [ -f /app/tsconfig.json ]; then echo "✅ Copy tsconfig.json"; fi
+COPY --from=builder /app/tsconfig.json ./ 2>/dev/null || true
+
+# Expose injected Sevalla port
 EXPOSE 3000
 
-# Start Next.js
+# Start app
 CMD ["npm", "run", "start", "--", "-p", "${PORT:-3000}"]
