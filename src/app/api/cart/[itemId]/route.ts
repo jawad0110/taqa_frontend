@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import axios from "axios";
 
-// ✅ Correct handler signature for dynamic routes in Next.js 15
+// ✅ Correct signature for dynamic route handlers
 export async function DELETE(
   request: NextRequest,
-  context: { params: { itemId: string } }
+  context: { params: Promise<{ itemId: string }> }
 ) {
-  const { itemId } = context.params;
+  const { itemId } = await context.params; // 👈 note the await
 
   try {
     const session = await auth();
@@ -39,9 +39,9 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  context: { params: { itemId: string } }
+  context: { params: Promise<{ itemId: string }> }
 ) {
-  const { itemId } = context.params;
+  const { itemId } = await context.params; // 👈 same fix here
 
   try {
     const session = await auth();
