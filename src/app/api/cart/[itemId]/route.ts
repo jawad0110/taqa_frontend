@@ -1,39 +1,38 @@
-import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import axios from "axios";
-import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server"
+import { auth } from "@/lib/auth"
+import axios from "axios"
 
 export async function DELETE(
-  request: NextRequest,
-  context: { params: Record<string, string> }
+  request: Request,
+  { params }: { params: { itemId: string } }
 ) {
   try {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.accessToken) {
       return NextResponse.json(
         { error: "Not authenticated" },
         { status: 401 }
-      );
+      )
     }
 
-    const { itemId } = context.params; // ✅ fixed here
+    const { itemId } = params // This is now product_uid
 
     const response = await axios.delete(
       `${process.env.NEXT_PUBLIC_API_URL}/cart/${itemId}`,
       {
         headers: {
-          Authorization: `Bearer ${session.user.accessToken}`,
-        },
+          Authorization: `Bearer ${session.user.accessToken}`
+        }
       }
-    );
+    )
 
-    return NextResponse.json(response.data);
+    return NextResponse.json(response.data)
   } catch (error: any) {
-    console.error("Cart item DELETE error:", error);
+    console.error("Cart item DELETE error:", error)
     return NextResponse.json(
       { error: error.response?.data?.message || "Failed to remove item from cart" },
       { status: error.response?.status || 500 }
-    );
+    )
   }
 }
 
@@ -42,33 +41,33 @@ export async function PATCH(
   { params }: { params: { itemId: string } }
 ) {
   try {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.accessToken) {
       return NextResponse.json(
         { error: "Not authenticated" },
         { status: 401 }
-      );
+      )
     }
 
-    const { itemId } = params;
-    const { quantity, variant_choice_id } = await request.json();
+    const { itemId } = params // This is now product_uid
+    const { quantity, variant_choice_id } = await request.json()
 
     const response = await axios.patch(
       `${process.env.NEXT_PUBLIC_API_URL}/cart/${itemId}`,
       { quantity, variant_choice_id },
       {
         headers: {
-          Authorization: `Bearer ${session.user.accessToken}`,
-        },
+          Authorization: `Bearer ${session.user.accessToken}`
+        }
       }
-    );
+    )
 
-    return NextResponse.json(response.data);
+    return NextResponse.json(response.data)
   } catch (error: any) {
-    console.error("Cart item PATCH error:", error);
+    console.error("Cart item PATCH error:", error)
     return NextResponse.json(
       { error: error.response?.data?.message || "Failed to update cart item" },
       { status: error.response?.status || 500 }
-    );
+    )
   }
 }
