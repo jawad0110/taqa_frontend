@@ -1,5 +1,5 @@
 # Stage 1: Build the Next.js app
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN npm run build
 
 
 # Stage 2: Run the app
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -36,3 +36,4 @@ EXPOSE 3000
 
 # Run the Next.js production server
 CMD ["npm", "run", "start", "--", "-p", "${PORT:-3000}"]
+
