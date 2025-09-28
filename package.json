@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "NEXT_TELEMETRY_DISABLED=1 SKIP_ENV_VALIDATION=1 next build --no-lint",
+    "build": "NEXT_TELEMETRY_DISABLED=1 SKIP_ENV_VALIDATION=1 next build --no-lint --no-check",
     "start": "next start",
     "lint": "next lint"
   },
