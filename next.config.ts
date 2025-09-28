@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 👇 Ensure Next.js recognizes your /src/app folder
+  // ✅ No need for appDir anymore in Next.js 13.4+
+  // It automatically detects /src/app
+  
   experimental: {
-    appDir: true,
     optimizeCss: true,
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
   },
@@ -18,8 +19,7 @@ const nextConfig: NextConfig = {
     formats: ["image/webp", "image/avif"],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
-    contentSecurityPolicy:
-      "default-src 'self'; script-src 'none'; sandbox;",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   allowedDevOrigins: [
@@ -38,7 +38,6 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
-  // 👇 Apply Webpack optimization if not using Turbopack
   ...(process.env.TURBOPACK
     ? {}
     : {
