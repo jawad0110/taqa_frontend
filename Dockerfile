@@ -26,7 +26,7 @@ RUN echo "📦 Contents of .next:" && ls -la .next || echo "❌ .next not found"
 # Stage 2: Runtime container
 FROM node:18-alpine AS runner
 
-WORKDIR /app
+WORKDIR /src
 ENV NODE_ENV=production
 
 # Copy files from builder
@@ -45,3 +45,4 @@ EXPOSE 3000
 
 # Start app
 CMD ["npm", "run", "start", "--", "-p", "3000"]
+
