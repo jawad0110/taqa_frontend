@@ -2,13 +2,10 @@ import { NextResponse, NextRequest } from "next/server"
 import { auth } from "@/lib/auth"
 import axios from "axios"
 
-type RouteContext = {
-  params: {
-    itemId: string
-  }
-}
-
-export async function DELETE(request: NextRequest, context: RouteContext) {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: { itemId: string } }
+) {
   try {
     const session = await auth()
     if (!session?.user?.accessToken) {
@@ -40,7 +37,10 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   }
 }
 
-export async function PATCH(request: NextRequest, context: RouteContext) {
+export async function PATCH(
+  request: NextRequest,
+  context: { params: { itemId: string } }
+) {
   try {
     const session = await auth()
     if (!session?.user?.accessToken) {
