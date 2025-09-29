@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server"
+import { NextResponse, NextRequest } from "next/server"
 import { auth } from "@/lib/auth"
 import axios from "axios"
-import type { NextRequest } from "next/server"
 
 type RouteContext = {
   params: {
